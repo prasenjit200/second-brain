@@ -3,15 +3,18 @@ import { CreateCardForm } from "../components/CreateContentModal";
 import { InputCard } from "../components/InputCard";
 import { DeleteIcon } from "../components/Icons";
 import { fetchBrains, deleteBrain } from "../api/brain"; 
+
 const validTypes = ["twitter", "youtube", "document", "web"] as const;
 
-const getValidType = (type: string): "twitter" | "youtube" | "document" | "web" => {
-  return validTypes.includes(type as any) ? (type as any) : "web"; // Default to "web" if invalid
+type ValidType = "twitter" | "youtube" | "document" | "web";
+
+const getValidType = (type: string): ValidType => {
+  return validTypes.includes(type as ValidType) ? (type as ValidType) : "web"; // Default to "web" if invalid
 };
 
 export default function BrainPage(): JSX.Element {
   const [showCreateCard, setShowCreateCard] = useState(false);
-  const [cards, setCards] = useState<{ id: string; title: string; link: string; type: string }[]>([]);
+  const [cards, setCards] = useState<{ id: string; title: string; link: string; type: ValidType }[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -97,7 +100,7 @@ export default function BrainPage(): JSX.Element {
               >
                 <DeleteIcon />
               </button>
-              <InputCard {...card} />
+              <InputCard {...card} type={getValidType(card.type)} />
             </div>
           ))}
         </div>
