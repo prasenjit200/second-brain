@@ -6,7 +6,7 @@ const app = express();
 
 
 app.use(cors({
-    origin: "https://second-brain-self.vercel.app", // Allow only your frontend
+    origin: "https://your-frontend-on-render.com", 
     methods: "GET,POST,PUT,DELETE",
     allowedHeaders: "Content-Type,Authorization"
 }));
