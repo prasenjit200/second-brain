@@ -2,39 +2,42 @@ import { useState, useEffect } from "react";
 import { CreateCardForm } from "../components/CreateContentModal";
 import { InputCard } from "../components/InputCard";
 import { DeleteIcon } from "../components/Icons";
-import { fetchBrains, deleteBrain } from "../api/brain"; 
+import { fetchBrains, deleteBrain, addBrain } from "../api/brain";
 
 const validTypes = ["twitter", "youtube", "document", "web"] as const;
 
-type ValidType = "twitter" | "youtube" | "document" | "web";
+type ValidType = typeof validTypes[number];
 
 const getValidType = (type: string): ValidType => {
-  return validTypes.includes(type as ValidType) ? (type as ValidType) : "web"; // Default to "web" if invalid
+  return validTypes.includes(type as ValidType) ? (type as ValidType) : "web";
 };
+
+interface Card {
+  id: string;
+  title: string;
+  link: string;
+  type: ValidType;
+}
 
 export default function BrainPage(): JSX.Element {
   const [showCreateCard, setShowCreateCard] = useState(false);
-  const [cards, setCards] = useState<{ id: string; title: string; link: string; type: ValidType }[]>([]);
+  const [cards, setCards] = useState<Card[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch saved content on page load
   useEffect(() => {
     const loadBrains = async () => {
       setLoading(true);
       try {
-        const response = await fetchBrains(); // Fetch from API
+        const response = await fetchBrains();
         const savedCards = response.map((card: any) => ({
           id: card._id,
           title: card.title,
           link: card.link,
-          type: getValidType(card.type), // Ensure correct type
+          type: getValidType(card.type),
         }));
-
-        console.log("Fetched content:", savedCards); // Debugging log
         setCards(savedCards);
       } catch (err: any) {
-        console.error("Error in BrainPage:", err.message);
         setError("Failed to load saved content.");
       } finally {
         setLoading(false);
@@ -43,18 +46,25 @@ export default function BrainPage(): JSX.Element {
     loadBrains();
   }, []);
 
-  // Handle new content added via CreateCardForm
-  const handleAddCard = (title: string, link: string, type: string) => {
-    const newCard = { id: Date.now().toString(), title, link, type: getValidType(type) };
-    setCards((prevCards) => [...prevCards, newCard]); // Update UI immediately
+  const handleAddCard = async (title: string, link: string, type: string) => {
+    try {
+      const newCard = await addBrain({ title, link, type: getValidType(type) });
+      setCards((prevCards) => [...prevCards, {
+        id: newCard._id,
+        title,
+        link,
+        type: getValidType(type)
+      }]);
+    } catch (err) {
+      setError("Failed to add content.");
+    }
     setShowCreateCard(false);
   };
 
-  // Delete card from backend and update UI
   const handleDeleteCard = async (id: string) => {
     try {
       await deleteBrain(id);
-      setCards((prevCards) => prevCards.filter((card) => card.id !== id)); // Update state
+      setCards((prevCards) => prevCards.filter((card) => card.id !== id));
     } catch (err) {
       setError("Failed to delete content.");
     }
@@ -62,7 +72,6 @@ export default function BrainPage(): JSX.Element {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-200 p-6">
-      
       <div className="w-full flex justify-between items-center p-4 mb-6 bg-white shadow-md rounded-lg">
         <h1 className="text-2xl font-bold text-gray-800">My Saved Content</h1>
         <button
@@ -72,6 +81,7 @@ export default function BrainPage(): JSX.Element {
           Add Content
         </button>
       </div>
+
       {showCreateCard && (
         <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
@@ -85,6 +95,7 @@ export default function BrainPage(): JSX.Element {
           </div>
         </div>
       )}
+
       {loading ? (
         <p className="text-center text-gray-600">Loading...</p>
       ) : error ? (
@@ -93,14 +104,13 @@ export default function BrainPage(): JSX.Element {
         <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {cards.map((card) => (
             <div key={card.id} className="relative bg-white shadow-lg rounded-lg overflow-hidden">
-              {/* Delete Button in Top Right Corner */}
               <button
                 onClick={() => handleDeleteCard(card.id)}
                 className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-2 rounded-full"
               >
                 <DeleteIcon />
               </button>
-              <InputCard {...card} type={getValidType(card.type)} />
+              <InputCard {...card} />
             </div>
           ))}
         </div>
