@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { signUpUser } from "../api/auth"; // Assuming your API functions are in this folder
-import { useNavigate } from "react-router-dom"; // Import useNavigate hook
+import { signUpUser } from "../api/auth";
+import { useNavigate } from "react-router-dom";
 
 const SignUpPage: React.FC = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const navigate = useNavigate(); // Initialize the navigate function
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,13 +22,10 @@ const SignUpPage: React.FC = () => {
 
     try {
       const userData = { username, password };
-      const response = await signUpUser(userData); // Make the sign-up request
+      const response = await signUpUser(userData);
 
       if (response.token) {
-        // Save the token in localStorage
         localStorage.setItem("authToken", response.token);
-
-        // Redirect to the dashboard after successful sign-up
         navigate("/dashboard");
       } else {
         setError("Failed to create account. Please try again.");
@@ -42,17 +39,15 @@ const SignUpPage: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-gradient-to-r from-blue-50 to-purple-50">
-      {/* Left Section */}
       <div className="w-1/2 flex flex-col justify-center items-center px-10">
         <h1 className="text-4xl font-bold text-gray-700 leading-tight">
           Join <span className="text-purple-600">Your Digital World</span>.
         </h1>
         <p className="text-gray-500 mt-4 text-lg">
-          Sign up to start saving and organizing your links—whether they are from YouTube, documents, or websites you love.
+          Sign up to start saving and organizing your links.
         </p>
       </div>
 
-      {/* Right Section */}
       <div className="w-1/2 bg-white flex flex-col justify-center items-center shadow-lg">
         <div className="w-3/4">
           <h2 className="text-2xl font-semibold text-gray-700 mb-4">Create an Account 🚀</h2>
@@ -78,16 +73,21 @@ const SignUpPage: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className={`w-full py-3 rounded-lg transition duration-300 ${loading ? "bg-purple-300" : "bg-purple-600 hover:bg-purple-700"} text-white`}
+              className={`w-full py-3 rounded-lg transition duration-300 ${
+                loading ? "bg-purple-300" : "bg-purple-600 hover:bg-purple-700"
+              } text-white`}
             >
               {loading ? "Signing Up..." : "Sign Up"}
             </button>
           </form>
           <p className="text-center mt-4">
-            Already have an account?{" "}
-            <button onClick={() => navigate("/")} className="text-blue-600 hover:underline">
+            Already have an account? {" "}
+            <span 
+              className="text-blue-600 hover:underline cursor-pointer"
+              onClick={() => navigate("/")}
+            >
               Sign In
-            </button>
+            </span>
           </p>
         </div>
       </div>
