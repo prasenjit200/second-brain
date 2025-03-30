@@ -3,8 +3,8 @@ import Dashboard from "./pages/Dashboard";
 import SignInPage from "./pages/SigninPage";
 import SignUpPage from "./pages/SignupPage";
 import Brain from "./pages/BrainPage";
-import PrivateRoute from "./components/PrivateRoute"; // Import the PrivateRoute component
-import { AuthProvider } from "./components/AuthContext"; // Import the AuthProvider
+import PrivateRoute from "./components/PrivateRoute"; 
+import { AuthProvider } from "./components/AuthContext"; 
 
 function Content() {
   return (
