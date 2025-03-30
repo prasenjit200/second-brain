@@ -2,10 +2,6 @@ import { Document, X, Youtube, WebLilk } from "../components/Icons";
 import { useNavigate } from "react-router-dom";
 import { logoutUser } from "../api/auth"; // Import the logout function
 
-type IconProps = {
-  className?: string;
-};
-
 export default function Dashboard(): JSX.Element {
   const navigate = useNavigate();
 
