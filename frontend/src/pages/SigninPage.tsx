@@ -86,9 +86,12 @@ const SignInPage: React.FC = () => {
           </form>
           <p className="text-center mt-4">
             Don't have an account?{" "}
-            <a href="/signup" className="text-blue-600 hover:underline">
+            <button 
+              onClick={() => navigate("/signup")} 
+              className="text-blue-600 hover:underline"
+            >
               Sign Up
-            </a>
+            </button>
           </p>
         </div>
       </div>
