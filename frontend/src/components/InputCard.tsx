@@ -1,11 +1,10 @@
 interface CardProps {
-  id: string;
   title: string;
   link: string;
   type: "twitter" | "youtube" | "document" | "web";
 }
 
-export function InputCard({ id, title, link, type }: CardProps) {
+export function InputCard({ title, link, type }: CardProps) {
   // Get formatted date once when the component mounts
   const addedDate = new Date().toLocaleString("en-US");
 
@@ -16,13 +15,13 @@ export function InputCard({ id, title, link, type }: CardProps) {
   };
 
   return (
-    <div
-      key={id}
-      className="max-w-full sm:max-w-sm lg:max-w-md xl:max-w-lg border shadow-sm overflow-hidden bg-white rounded-lg"
-    >
+    <div className="max-w-full sm:max-w-sm lg:max-w-md xl:max-w-lg border shadow-sm overflow-hidden bg-white rounded-lg">
       {/* Header Section */}
       <div className="flex justify-between p-4 border-b bg-gray-50">
-        <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
+        {/* Left Section */}
+        <div className="flex items-center space-x-4">
+          <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
+        </div>
       </div>
 
       {/* Embedded Content Section */}
@@ -53,7 +52,12 @@ export function InputCard({ id, title, link, type }: CardProps) {
         {/* Document Link */}
         {type === "document" && (
           <div className="h-64 w-full flex items-center justify-center bg-gray-100">
-            <a href={link} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+            <a
+              href={link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 underline"
+            >
               View Document
             </a>
           </div>
@@ -62,7 +66,12 @@ export function InputCard({ id, title, link, type }: CardProps) {
         {/* Web Link */}
         {type === "web" && (
           <div className="h-64 w-full flex items-center justify-center bg-gray-100">
-            <a href={link} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+            <a
+              href={link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 underline"
+            >
               Visit Website
             </a>
           </div>
