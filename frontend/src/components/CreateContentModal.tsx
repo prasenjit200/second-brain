@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { addBrain } from "../api/brain";
 
 type CreateCardFormProps = {
   onSubmit: (title: string, link: string, type: string) => void;
@@ -25,7 +24,7 @@ export function CreateCardForm({ onSubmit }: CreateCardFormProps) {
         setLoading(false);
         return;
       }
-      const response = await addBrain({ title, link, type });
+      
 
 
       
