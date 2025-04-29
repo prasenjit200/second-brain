@@ -1,6 +1,9 @@
 
-const PORT:number =3000
-const DB_URL:string ="mongodb+srv://prasenjitdey092:OQLEMhal95rOI6Zu@prasen.uaauga1.mongodb.net/"
-const JWT_SECRET:string="2004"
+import dotenv from 'dotenv';
+dotenv.config();
 
-export {PORT , DB_URL, JWT_SECRET};
+const PORT: number = parseInt(process.env.PORT || '3000');
+const DB_URL: string = process.env.DB_URL || '';
+const JWT_SECRET: string = process.env.JWT_SECRET || '';
+
+export { PORT, DB_URL, JWT_SECRET };
